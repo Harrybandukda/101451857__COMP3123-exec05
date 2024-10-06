@@ -14,8 +14,13 @@ router.get('/home', (req, res) => {
 /*
 - Return all details from user.json file to client as JSON format
 */
-router.get('/profile', (req,res) => {
-  res.send('This is profile router');
+router.get('/profile', (req, res) => {
+  fs.readFile('user.json', 'utf8', (err, data) => {
+      if (err) {
+          return res.status(500).json({ message: 'Error getting user data' });
+      }
+      res.json(JSON.parse(data));
+  });
 });
 
 /*
