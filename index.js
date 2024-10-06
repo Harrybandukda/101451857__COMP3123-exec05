@@ -42,8 +42,27 @@ router.get('/profile', (req, res) => {
         message: "Password is invalid"
     }
 */
-router.post('/login', (req,res) => {
-  res.send('This is login router');
+router.post('/login', (req, res) => {
+  const { username, password } = req.body;
+
+  fs.readFile('user.json', 'utf8', (err, data) => {
+    if (err) {
+      return res.status(500).send('Error reading user data');
+    }
+
+    const users = JSON.parse(data);
+    const user = Object.values(users).find(u => u.username === username);
+
+    if (!user) {
+      return res.json({ status: false, message: "User Name is invalid" });
+    }
+
+    if (user.password !== password) {
+      return res.json({ status: false, message: "Password is invalid" });
+    }
+
+    res.json({ status: true, message: "User Is valid" });
+  });
 });
 
 /*
