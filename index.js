@@ -4,6 +4,9 @@ const bodyParser = require('body-parser');
 const fs = require('fs');
 const router = express.Router();
 
+app.use(bodyParser.json()); 
+app.use(bodyParser.urlencoded({ extended: true }));
+
 /*
 - Create new html file name home.html 
 - add <h1> tag with message "Welcome to ExpressJs Tutorial"
