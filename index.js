@@ -55,10 +55,9 @@ router.post('/login', (req, res) => {
       return res.status(500).send('Error reading user data');
     }
 
-    const users = JSON.parse(data);
-    const user = Object.values(users).find(u => u.username === username);
+    const user = JSON.parse(data); 
 
-    if (!user) {
+    if (user.username !== username) {
       return res.json({ status: false, message: "User Name is invalid" });
     }
 
@@ -66,9 +65,11 @@ router.post('/login', (req, res) => {
       return res.json({ status: false, message: "Password is invalid" });
     }
 
-    res.json({ status: true, message: "User Is valid" });
+    res.json({ status: true, message: "User is valid" });
   });
 });
+
+module.exports = router;
 
 /*
 - Modify /logout route to accept username as parameter and display message
