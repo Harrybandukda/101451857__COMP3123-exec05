@@ -1,5 +1,7 @@
 const express = require('express');
 const app = express();
+const bodyParser = require('body-parser');
+const fs = require('fs');
 const router = express.Router();
 
 /*
@@ -69,20 +71,27 @@ router.post('/login', (req, res) => {
 - Modify /logout route to accept username as parameter and display message
     in HTML format like <b>${username} successfully logout.<b>
 */
-router.get('/logout', (req,res) => {
-  res.send('This is logout router');
+router.get('/logout', (req, res) => {
+  const { username } = req.query;
+  if (username) {
+      res.send(`<b>${username} successfully logged out.</b>`);
+  } else {
+      res.status(400).send('<b>Username not provided.</b>');
+  }
 });
 
 /*
 Add error handling middleware to handle below error
 - Return 500 page with message "Server Error"
 */
-app.use((err,req,res,next) => {
-  res.send('This is error router');
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Server Error');
 });
 
 app.use('/', router);
 
-app.listen(process.env.port || 8081);
-
-console.log('Web Server is listening at port '+ (process.env.port || 8081));
+const PORT = process.env.PORT || 8085;
+app.listen(PORT, () => {
+  console.log(`Web Server is listening at port ${PORT}`);
+});
